@@ -1,8 +1,55 @@
+# Dependencies
 node_modules/
-build/
+.pnpm-store/
+.bun/
+
+# Production Build Outputs
 dist/
-coverage/
+build/
+out/
+.next/
+
+# IDEs and Editors
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# Operating System Files
 .DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs and Diagnostics
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+bun.lockb
+
+# Coverage and Testing
+coverage/
+.nyc_output
+
+# Environment and Secrets (Extremely Important!)
 .env*
 !.env.example
+*.local
+
+# Framework & Cloud Deployment Tool Caches
+.vercel
+.netlify
+.turbo
+.vite
+
+# Capacitor / Mobile App Native Specific Generated Artifacts
+# (Android platform specific temporary local settings)
+android/app/build/
+android/.gradle/
+android/local.properties
+android/capacitor-cordova-android-plugins/build/
+.capacitor/
