@@ -70,13 +70,13 @@ export function CategoryPage({ slug }: { slug: string }) {
             <h4 className="text-sm font-display font-bold text-[#14213D]">{catMeta.title} Visual Space</h4>
             <p className="text-[11px] text-[#14213D]/60">This high-contrast container is optimized for ultra-fast loading speeds and core web vitals. Place your custom asset here later!</p>
           </div>
-          {/*
+          
           <img 
             src={`/public/images/category/${slug}.png`} 
             alt={catMeta.title} 
             className="absolute inset-0 w-full h-full object-cover object-center transform scale-100 hover:scale-[1.01] transition-transform duration-500 ease-out"
           />
-          */}
+         
         </div>
       </div>
 
