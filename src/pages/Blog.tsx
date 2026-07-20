@@ -69,14 +69,14 @@ export function BlogPage() {
                       {guide.title} Visual
                     </p>
                   </div>
-                  {/*
+                  
                   <img
                     src={`/public/images/guides/${guide.slug}.png`}
                     alt={guide.title}
                     loading="lazy"
                     className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                   />
-                  */}
+                 
                 </div>
                 <CardContent className="p-6 flex flex-col justify-between flex-grow gap-4">
                 <div>

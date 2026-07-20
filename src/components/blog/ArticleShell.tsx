@@ -103,13 +103,13 @@ export function ArticleShell({ guide }: { guide: ArticleGuide }) {
           <h4 className="text-sm font-display font-bold text-[#14213D]">{guide.title} Editorial Illustration</h4>
           <p className="text-[11px] text-[#14213D]/60">This high-contrast vector container is optimized for ultra-fast loading speed and perfect SEO performance. Place your custom asset here later!</p>
         </div>
-        {/*
+        
         <img
           src={`/public/images/guides/${guide.slug}.png`}
           alt={guide.title}
           className="absolute inset-0 w-full h-full object-cover transform scale-100 hover:scale-[1.01] transition-transform duration-500 ease-out"
-        />
-        */}
+          loading="lazy"        />
+       
       </div>
 
       {/* AEO/GEO Executive Policy Summary Bento Box */}
