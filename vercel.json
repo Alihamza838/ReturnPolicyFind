@@ -1,0 +1,276 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "cleanUrls": true,
+  "trailingSlash": true,
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "framework": null,
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.returnpolicyfind.com"
+        }
+      ],
+      "destination": "https://returnpolicyfind.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/stores/walmart/without-receipt(/?)",
+      "destination": "/stores/walmart/",
+      "permanent": true
+    },
+    {
+      "source": "/stores/target/opened-items(/?)",
+      "destination": "/stores/target/",
+      "permanent": true
+    },
+    {
+      "source": "/stores/amazon/after-30-days(/?)",
+      "destination": "/stores/amazon/",
+      "permanent": true
+    },
+    {
+      "source": "/blog(/?)",
+      "destination": "/guides/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/walmart-return-policy-without-receipt(/?)",
+      "destination": "/guides/return-without-receipt/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/target-return-policy-explained(/?)",
+      "destination": "/stores/target/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/costco-electronics-return-policy(/?)",
+      "destination": "/stores/costco/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/amazon-return-policy-guide(/?)",
+      "destination": "/stores/amazon/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/best-buy-return-policy-open-box(/?)",
+      "destination": "/stores/best-buy/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/nike-return-policy-worn-shoes(/?)",
+      "destination": "/stores/nike/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/sephora-ulta-return-policy-compared(/?)",
+      "destination": "/compare/sephora-vs-ulta/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/holiday-return-policy-2026(/?)",
+      "destination": "/guides/holiday-return-deadlines-2026/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/store-credit-vs-refund-explained(/?)",
+      "destination": "/guides/exchange-only-stores/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/final-sale-items-explained(/?)",
+      "destination": "/guides/return-policy-cheat-sheet-2026/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/best-return-policies-2026(/?)",
+      "destination": "/guides/stores-with-90-day-return-policy/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/return-policy-law-by-state(/?)",
+      "destination": "/countries/united-states/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/walmart-us-vs-canada-return-policy(/?)",
+      "destination": "/brands/walmart/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/target-us-vs-target-australia-different-companies(/?)",
+      "destination": "/stores/target-au/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/sephora-us-vs-canada-return-policy(/?)",
+      "destination": "/brands/sephora/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/international-shopper-guide-returns-across-borders(/?)",
+      "destination": "/countries/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/credit-card-return-protection-guide(/?)",
+      "destination": "/guides/return-policy-cheat-sheet-2026/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/eu-vs-us-online-shopping-cooling-off-rights(/?)",
+      "destination": "/countries/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/sephora-return-blacklist-retail-equation-guide(/?)",
+      "destination": "/stores/sephora/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/cosmetics-skincare-sanitization-testing-return-guide(/?)",
+      "destination": "/category/beauty/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/electronics-serial-number-tracking-policy(/?)",
+      "destination": "/category/electronics/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/dubai-e-commerce-return-policy-guide-2026(/?)",
+      "destination": "/countries/uae/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/saudia-e-commerce-return-policy-guide-2026(/?)",
+      "destination": "/countries/saudi-arabia/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/ebay-global-return-policy-all-countries-2026(/?)",
+      "destination": "/stores/ebay/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/pakistan-daraz-refund-return-guide-2026(/?)",
+      "destination": "/countries/pakistan/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/india-e-commerce-return-policy-battle-2026(/?)",
+      "destination": "/countries/india/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/china-cross-border-ecommerce-return-guide-2026(/?)",
+      "destination": "/compare/temu-vs-aliexpress/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/dsw-return-policy-complete-guide(/?)",
+      "destination": "/stores/dsw/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/dsw-return-policy-without-receipt(/?)",
+      "destination": "/stores/dsw/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/dsw-shoes-return-policy(/?)",
+      "destination": "/stores/dsw/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/dsw-return-window-policy(/?)",
+      "destination": "/stores/dsw/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/dsw-vs-nike-vs-target-vs-nordstrom-return-policy(/?)",
+      "destination": "/compare/dsw-vs-nordstrom/",
+      "permanent": true
+    },
+    {
+      "source": "/privacy-policy(/?)",
+      "destination": "/privacy/",
+      "permanent": true
+    },
+    {
+      "source": "/terms-of-use(/?)",
+      "destination": "/terms/",
+      "permanent": true
+    },
+    {
+      "source": "/tools(/?)",
+      "destination": "/tools/return-deadline-calculator/",
+      "permanent": true
+    },
+    {
+      "source": "/category(/?)",
+      "destination": "/stores/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/:slug",
+      "destination": "/guides/",
+      "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(images|og)/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=2592000, stale-while-revalidate=86400"
+        }
+      ]
+    },
+    {
+      "source": "/sw.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
+        }
+      ]
+    }
+  ]
+}
