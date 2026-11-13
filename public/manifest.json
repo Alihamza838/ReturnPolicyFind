@@ -1,24 +1,14 @@
 {
   "name": "ReturnPolicyFind",
-  "short_name": "ReturnPolicy",
-  "description": "Verified store return and refund policies — return windows, receipt rules, and step-by-step instructions.",
+  "short_name": "ReturnPolicyFind",
+  "description": "Find any store's return policy in seconds: windows, receipts and refunds, checked on official sites.",
   "start_url": "/",
   "display": "standalone",
-  "orientation": "any",
-  "background_color": "#FAF8F3",
+  "background_color": "#FBF7F0",
   "theme_color": "#14213D",
   "icons": [
-    {
-      "src": "/icon.svg",
-      "sizes": "48x48 96x96 128x128 144x144 192x192 256x256 384x384 512x512",
-      "type": "image/svg+xml",
-      "purpose": "any"
-    },
-    {
-      "src": "/icon.svg",
-      "sizes": "192x192 512x512",
-      "type": "image/svg+xml",
-      "purpose": "maskable"
-    }
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml" }
   ]
 }

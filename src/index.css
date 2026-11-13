@@ -1,87 +1,270 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@300..700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 @import "tailwindcss";
 
+/* ── ReturnPolicyFind design tokens ────────────────────────────────────────
+   Identity: the shop receipt. Deep navy ink, warm coral for actions, cream paper,
+   ticket shapes with notches and perforations, monospace numbers like a till roll.
+   Coral fills use coral-700 (#C2410C): 5.2:1 with white text (WCAG AA). */
 @theme {
-  --color-ink: #14213D;
-  --color-ink-50: #EEF1F7;
-  --color-ink-100: #D6DCEA;
-  --color-ink-400: #3D4E77;
-  --color-ink-600: #232F4E;
-  --color-ink-900: #0B111F;
+  --color-ink: #14213d;
+  --color-ink-2: #3a4a6b;
+  --color-ink-3: #5a6680;
+  --color-navy: #0e1830;
+  --color-navy-2: #1b2a4e;
+  --color-coral-50: #fff4ed;
+  --color-coral-100: #ffe4d1;
+  --color-coral-200: #fec8a6;
+  --color-coral-400: #fb8a4c;
+  --color-coral-500: #f26a2e;
+  --color-coral-600: #dd5418;
+  --color-coral-700: #c2410c;
+  --color-coral-800: #9a3412;
+  --color-cream: #fbf7f0;
+  --color-cream-2: #f4eee2;
+  --color-card: #ffffff;
+  --color-line: #e6dfd1;
+  --color-mint-50: #ecfdf5;
+  --color-mint-700: #047857;
+  --color-mint-800: #065f46;
 
-  --color-paper: #FAF8F3;
-  --color-paper-muted: #F1EDE2;
-
-  --color-teal-brand: #2A6F77;
-  --color-teal-dark: #1D4F55;
-  --color-teal-light: #DCEEEF;
-
-  --color-signal-yes: #1E7B57;
-  --color-signal-yes-bg: #E4F3EC;
-  --color-signal-no: #B3261E;
-  --color-signal-no-bg: #FBE8E7;
-  --color-signal-warn: #C8862B;
-  --color-signal-warn-bg: #FBF0DF;
-
-  --font-display: "Fraunces", Georgia, serif;
-  --font-sans: "Inter", system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
-
-  --shadow-receipt: 0 1px 0 rgba(20, 33, 61, 0.06), 0 8px 24px -12px rgba(20, 33, 61, 0.25);
-  --background-image-receipt-perf: repeating-linear-gradient(90deg, transparent, transparent 6px, rgba(20, 33, 61, 0.15) 6px, rgba(20, 33, 61, 0.15) 7px);
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
 }
 
-@layer base {
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+body {
+  margin: 0;
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+h1,
+h2,
+h3 {
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+:focus-visible {
+  outline: 3px solid var(--color-coral-500);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+[id] {
+  scroll-margin-top: 84px;
+}
+::selection {
+  background: var(--color-coral-100);
+}
+
+/* ── Signature shapes ─────────────────────────────────────────────────── */
+
+/* Ticket: rounded card with two half-circle notches on the sides */
+.ticket {
+  position: relative;
+  background: var(--color-card);
+  border-radius: 22px;
+  -webkit-mask:
+    radial-gradient(circle 12px at 0 var(--notch, 50%), #0000 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle 12px at 100% var(--notch, 50%), #0000 98%, #000) right / 51% 100% no-repeat;
+  mask:
+    radial-gradient(circle 12px at 0 var(--notch, 50%), #0000 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle 12px at 100% var(--notch, 50%), #0000 98%, #000) right / 51% 100% no-repeat;
+}
+/* Dashed tear line */
+.perf {
+  border: 0;
+  height: 2px;
+  background-image: repeating-linear-gradient(90deg, var(--color-line) 0 8px, transparent 8px 14px);
+}
+/* Receipt: zig-zag bottom edge */
+.receipt {
+  background: var(--color-card);
+  --zz: 10px;
+  -webkit-mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / calc(2 * var(--zz)) 100%;
+  mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / calc(2 * var(--zz)) 100%;
+  padding-bottom: calc(var(--zz) + 1.25rem);
+}
+/* Rubber stamp */
+.stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 2.5px solid currentColor;
+  border-radius: 10px;
+  padding: 0.25rem 0.65rem;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transform: rotate(-4deg);
+}
+/* Faint barcode, decorative only */
+.barcode {
+  height: 34px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--color-ink) 0 2px,
+    transparent 2px 4px,
+    var(--color-ink) 4px 5px,
+    transparent 5px 8px,
+    var(--color-ink) 8px 11px,
+    transparent 11px 13px
+  );
+  opacity: 0.85;
+}
+/* Dotted leader between a label and its value (receipt line) */
+.leader {
+  flex: 1;
+  min-width: 1.5rem;
+  border-bottom: 2px dotted var(--color-line);
+  transform: translateY(-0.35em);
+}
+/* Hero blob */
+.blob {
+  border-radius: 42% 58% 63% 37% / 41% 44% 56% 59%;
+}
+
+/* ── Long-form text ───────────────────────────────────────────────────── */
+.prose-read {
+  max-width: 70ch;
+  color: var(--color-ink-2);
+}
+.prose-read h2 {
+  margin: 2em 0 0.6em;
+  font-size: 1.55rem;
+  color: var(--color-ink);
+}
+.prose-read h3 {
+  margin: 1.5em 0 0.4em;
+  font-size: 1.15rem;
+  color: var(--color-ink);
+}
+.prose-read p,
+.prose-read ul,
+.prose-read ol {
+  margin: 0 0 1.1em;
+}
+.prose-read ul,
+.prose-read ol {
+  padding-left: 1.3em;
+}
+.prose-read ul {
+  list-style: disc;
+}
+.prose-read ol {
+  list-style: decimal;
+}
+.prose-read li {
+  margin: 0.3em 0;
+}
+.prose-read a {
+  color: var(--color-coral-700);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.prose-read strong {
+  color: var(--color-ink);
+}
+
+/* ── Motion (transform / opacity only; off with reduced motion) ──────── */
+.fx-ready [data-reveal]:not(.is-in),
+.fx-ready [data-stagger] > :not(.is-in) {
+  opacity: 0;
+  transform: translateY(24px) rotate(-0.6deg);
+}
+.fx-ready [data-reveal],
+.fx-ready [data-stagger] > * {
+  transition:
+    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.fx-ready [data-stagger] > :nth-child(2) { transition-delay: 70ms; }
+.fx-ready [data-stagger] > :nth-child(3) { transition-delay: 140ms; }
+.fx-ready [data-stagger] > :nth-child(4) { transition-delay: 210ms; }
+.fx-ready [data-stagger] > :nth-child(5) { transition-delay: 280ms; }
+.fx-ready [data-stagger] > :nth-child(6) { transition-delay: 350ms; }
+
+.lift {
+  transition:
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.25s;
+}
+.lift:hover {
+  transform: translateY(-3px) rotate(-0.4deg);
+  box-shadow: 0 18px 40px -18px rgb(20 33 61 / 0.35);
+}
+.float-a {
+  animation: float 7s ease-in-out infinite;
+}
+.float-b {
+  animation: float 9s ease-in-out -3s infinite;
+}
+@keyframes float {
+  50% {
+    transform: translateY(-10px) rotate(1.5deg);
+  }
+}
+.bar-grow {
+  transform-origin: left center;
+  animation: bar-grow 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes bar-grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+.toast-in {
+  animation: toast-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
   html {
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
+  }
+  [data-reveal],
+  [data-stagger] > * {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .float-a,
+  .float-b,
+  .bar-grow,
+  .toast-in {
+    animation: none !important;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media print {
+  header,
+  footer,
+  .no-print {
+    display: none !important;
   }
   body {
-    background-color: var(--color-paper);
-    color: var(--color-ink);
-    font-family: var(--font-sans);
-    -webkit-font-smoothing: antialiased;
+    background: #fff;
   }
-  h1, h2, h3, h4 {
-    font-family: var(--font-display);
-    color: var(--color-ink);
-  }
-  ::selection {
-    background-color: var(--color-teal-light);
-    color: var(--color-ink);
-  }
-  :focus-visible {
-    outline: 2px solid var(--color-teal-brand);
-    outline-offset: 2px;
-  }
-}
-
-@layer components {
-  /* Register receipt visual signature */
-  .receipt-card {
-    position: relative;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: var(--shadow-receipt);
-    border: 1px solid var(--color-ink-100);
-  }
-  .receipt-card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 8px;
-    background-image: var(--background-image-receipt-perf);
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+    word-break: break-all;
   }
 }
