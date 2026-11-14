@@ -1,7 +1,7 @@
 /**
  * Layout.tsx - top bar, header, footer and the page outlet shared by every route.
  */
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { POLICIES } from "../data/policies";
 import { COUNTRIES } from "../data/countries";
@@ -76,10 +76,43 @@ function ScrollToTop() {
   return null;
 }
 
+/** Floating "back to top" button, shown after scrolling down (fixed: no layout shift) */
+function BackToTop() {
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    const on = () => setShow(window.scrollY > 1200);
+    on();
+    window.addEventListener("scroll", on, { passive: true });
+    return () => window.removeEventListener("scroll", on);
+  }, []);
+  return (
+    <button
+      type="button"
+      aria-label="Back to top"
+      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      className={`no-print fixed bottom-24 right-4 z-30 flex h-12 w-12 items-center justify-center rounded-full bg-navy text-white shadow-lg transition lg:bottom-6 ${show ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-4 opacity-0"}`}
+    >
+      <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
+        <path d="m6 15 6-6 6 6" />
+      </svg>
+    </button>
+  );
+}
+
 export default function Layout() {
   const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
   useEffect(() => setOpen(false), [pathname]);
+  // Fade the new page in after client-side navigation (never on the first, prerendered load)
+  const first = useRef(true);
+  const [navigated, setNavigated] = useState(false);
+  useEffect(() => {
+    if (first.current) {
+      first.current = false;
+      return;
+    }
+    setNavigated(true);
+  }, [pathname]);
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -147,10 +180,11 @@ export default function Layout() {
         )}
       </header>
 
-      <main id="main" className="flex-1">
+      <main id="main" key={pathname} className={`flex-1 ${navigated ? "page-in" : ""}`}>
         <Outlet />
       </main>
-      <CountrySuggestion pathname={pathname} />
+      {!pathname.startsWith("/stores/") || pathname === "/stores/" ? <CountrySuggestion pathname={pathname} /> : null}
+      <BackToTop />
 
       <footer className="mt-24 bg-navy text-slate-300">
         <div className="h-3 bg-cream" style={{ WebkitMask: "conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) 50%/20px 100%", mask: "conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) 50%/20px 100%" }} aria-hidden="true" />

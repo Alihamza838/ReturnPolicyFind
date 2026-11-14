@@ -10,13 +10,18 @@
  * number comes from src/data/policies.ts, so re-run after a policy changes.
  * Optional filter: npm run images -- walmart. CHROMIUM_PATH selects the browser binary.
  */
-import { mkdirSync } from "node:fs";
+import { mkdirSync, readFileSync, readdirSync } from "node:fs";
 import sharp from "sharp";
 import { chromium } from "playwright-core";
 import { POLICIES, getPolicy, type VerifiedPolicy } from "../src/data/policies";
 import { COUNTRIES, countryOfPolicy, storesInCountry } from "../src/data/countries";
 import { COMPARE_PAIRS, pairSlug } from "../src/site/data";
 import { GUIDES } from "../src/site/guides";
+import { parseArticle } from "../src/site/article-parse";
+
+const ARTICLES = readdirSync("src/content/articles")
+  .filter((f) => f.endsWith(".md"))
+  .map((f) => parseArticle(readFileSync(`src/content/articles/${f}`, "utf8"), f));
 
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const fmt = (iso: string) => new Date(`${iso}T12:00:00Z`).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
@@ -38,7 +43,7 @@ const brand = (pos: string, light = false) =>
 
 function win(p: VerifiedPolicy) {
   if (p.windowDays === null && p.headline.startsWith("No change-of-mind")) return { big: "0", unit: "DAYS" };
-  if (p.windowDays === null) return p.slug === "costco" ? { big: "∞", unit: "NO SET LIMIT" } : { big: "?", unit: "VARIES" };
+  if (p.windowDays === null) return p.slug === "costco" || /no set|any time|no fixed/i.test(p.headline) ? { big: "∞", unit: "NO SET LIMIT" } : { big: "?", unit: "VARIES" };
   return { big: String(p.windowDays), unit: p.windowDays === 1 ? "DAY" : "DAYS" };
 }
 const fit = (s: string, base: number, len: number) => (s.length > len ? Math.round((base * len) / s.length) : base);
@@ -174,6 +179,7 @@ async function main() {
   const jobs: { html: string; og: string; webp?: string }[] = [];
   for (const p of POLICIES) jobs.push({ html: storeHtml(p), og: `public/og/stores/${p.slug}.jpg`, webp: `public/images/tickets/${p.slug}.webp` });
   for (const g of GUIDES) jobs.push({ html: guideHtml(g.h1, g.kicker, g.rows().map((r) => r.p)), og: `public/og/guides/${g.slug}.jpg`, webp: `public/images/guides/${g.slug}.webp` });
+  for (const a of ARTICLES) jobs.push({ html: guideHtml(a.title.split(":")[0], a.kicker, a.stores.map((x) => getPolicy(x)).filter((p): p is VerifiedPolicy => Boolean(p))), og: `public/og/guides/${a.slug}.jpg`, webp: `public/images/guides/${a.slug}.webp` });
   for (const [a, b] of COMPARE_PAIRS) jobs.push({ html: compareHtml(getPolicy(a)!, getPolicy(b)!), og: `public/og/compare/${pairSlug(a, b)}.jpg` });
   for (const c of COUNTRIES) {
     const stores = [...storesInCountry(c)].sort((x, y) => (y.windowDays ?? 9999) - (x.windowDays ?? 9999));

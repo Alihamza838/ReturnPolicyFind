@@ -58,6 +58,11 @@
       "permanent": true
     },
     {
+      "source": "/blog/how-to-return-online-orders(/?)",
+      "destination": "/guides/how-to-return-an-online-order/",
+      "permanent": true
+    },
+    {
       "source": "/blog/best-buy-return-policy-open-box(/?)",
       "destination": "/stores/best-buy/",
       "permanent": true
@@ -79,7 +84,7 @@
     },
     {
       "source": "/blog/store-credit-vs-refund-explained(/?)",
-      "destination": "/guides/exchange-only-stores/",
+      "destination": "/guides/store-credit-vs-refund/",
       "permanent": true
     },
     {
@@ -89,7 +94,7 @@
     },
     {
       "source": "/blog/best-return-policies-2026(/?)",
-      "destination": "/guides/stores-with-90-day-return-policy/",
+      "destination": "/guides/best-return-policies-2026/",
       "permanent": true
     },
     {

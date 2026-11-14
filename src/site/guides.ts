@@ -77,7 +77,7 @@ export const GUIDES: Guide[] = [
     ],
     rowsLabel: "Stores with 90 days or more",
     rows: () =>
-      POLICIES.filter((p) => (p.windowDays ?? (p.slug === "costco" ? 10000 : 0)) >= 90)
+      POLICIES.filter((p) => (p.windowDays ?? (p.slug === "costco" || /no set|any time|no fixed/i.test(p.headline) ? 10000 : 0)) >= 90)
         .sort(byWindow)
         .map((p) => ({ p, note: p.headline })),
     tips: ["Keep electronics boxes for 30 days even at a 90-day store.", "Pay by card: many long-window stores can look up a purchase without the receipt."],

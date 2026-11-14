@@ -8,6 +8,7 @@ import { POLICIES } from "./data/policies";
 import { BRANDS, COUNTRIES } from "./data/countries";
 import { CATEGORIES, COMPARE_PAIRS, pairSlug } from "./site/data";
 import { GUIDES } from "./site/guides";
+import { ARTICLES } from "./site/articles";
 
 export const routes: RouteRecord[] = [
   {
@@ -26,7 +27,7 @@ export const routes: RouteRecord[] = [
       { path: "compare", lazy: () => import("./site/pages/ComparePage") },
       { path: "compare/:pair", lazy: () => import("./site/pages/ComparePairPage"), getStaticPaths: () => COMPARE_PAIRS.map(([a, b]) => `compare/${pairSlug(a, b)}`) },
       { path: "guides", lazy: () => import("./site/pages/GuidesPage") },
-      { path: "guides/:slug", lazy: () => import("./site/pages/GuidePage"), getStaticPaths: () => GUIDES.map((g) => `guides/${g.slug}`) },
+      { path: "guides/:slug", lazy: () => import("./site/pages/GuidePage"), getStaticPaths: () => [...ARTICLES, ...GUIDES].map((g) => `guides/${g.slug}`) },
       { path: "tools/return-deadline-calculator", lazy: () => import("./site/pages/ToolPage") },
       { path: "about", lazy: () => import("./site/pages/AboutPage") },
       { path: "editorial-policy", lazy: () => import("./site/pages/EditorialPage") },

@@ -8,9 +8,13 @@ import { countryOfPolicy } from "../../data/countries";
 import { formatDate, guideImage, guideOg } from "../data";
 import { EDITOR, href } from "../config";
 import { NotFoundContent } from "./NotFoundPage";
+import ArticleView from "../ArticleView";
+import { getArticle } from "../articles";
 
 export function Component() {
   const { slug } = useParams<{ slug: string }>();
+  const article = getArticle(slug);
+  if (article) return <ArticleView a={article} />;
   const g = getGuide(slug);
   if (!g) return <NotFoundContent />;
   const rows = g.rows();

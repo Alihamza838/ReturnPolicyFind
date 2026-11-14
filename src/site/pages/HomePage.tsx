@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Seo from "../Seo";
 import { faqSchema, organizationSchema, websiteSchema } from "../schema";
@@ -8,6 +8,7 @@ import { POLICIES, getPolicy } from "../../data/policies";
 import { BRANDS, COUNTRIES, brandStores, countryOfPolicy } from "../../data/countries";
 import { CATEGORIES, COMPARE_PAIRS, formatDate, guideImage, latestChecked, pairSlug, storesInCategory } from "../data";
 import { GUIDES } from "../guides";
+import { ARTICLES } from "../articles";
 import { href } from "../config";
 
 const POPULAR = ["walmart", "target", "amazon", "costco", "dsw", "best-buy", "amazon-uk", "next", "noon", "amazon-in", "daraz", "khaadi"];
@@ -88,6 +89,42 @@ function InstantFinder() {
   );
 }
 
+/** Stores this visitor opened before (kept only in their browser) */
+function RecentStores() {
+  const [list, setList] = useState<string[]>([]);
+  useEffect(() => {
+    try {
+      setList((JSON.parse(window.localStorage.getItem("rpf-recent") ?? "[]") as string[]).filter((s) => getPolicy(s)).slice(0, 6));
+    } catch {
+      setList([]);
+    }
+  }, []);
+  if (!list.length) return null;
+  return (
+    <section aria-labelledby="recent" className="mt-10 rounded-[22px] border border-line bg-white p-5">
+      <h2 id="recent" className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-coral-700">
+        Pick up where you left off
+      </h2>
+      <ul className="mt-3 flex flex-wrap gap-2">
+        {list.map((s) => {
+          const p = getPolicy(s)!;
+          const w = windowLabel(p);
+          return (
+            <li key={s}>
+              <PillLink to={`/stores/${s}`}>
+                {p.name}
+                <span className="font-mono text-coral-700">
+                  {w.big} {w.unit}
+                </span>
+              </PillLink>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  );
+}
+
 export function Component() {
   const walmart = getPolicy("walmart")!;
   const checked = latestChecked();
@@ -103,8 +140,8 @@ export function Component() {
 
       {/* Hero */}
       <section className="relative overflow-hidden bg-cream">
-        <div aria-hidden="true" className="blob pointer-events-none absolute -right-28 -top-20 h-[420px] w-[420px] bg-coral-100 opacity-70" />
-        <div aria-hidden="true" className="blob pointer-events-none absolute -bottom-32 left-1/3 h-72 w-72 bg-cream-2" />
+        <div aria-hidden="true" data-parallax="0.18" className="blob pointer-events-none absolute -right-28 -top-20 h-[420px] w-[420px] bg-coral-100 opacity-70" />
+        <div aria-hidden="true" data-parallax="-0.08" className="blob pointer-events-none absolute -bottom-32 left-1/3 h-72 w-72 bg-cream-2" />
         <Container className="relative grid gap-12 py-14 sm:py-20 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-center">
           <div>
             <Stamp tone="coral">Checked {formatDate(checked)}</Stamp>
@@ -172,6 +209,8 @@ export function Component() {
       </section>
 
       <Container>
+        <RecentStores />
+
         <Section id="countries" kicker="Step 1" title="Where are you shopping?" intro="Rules change at the border. Pick your country for local stores, legal rights and the official place to complain.">
           <CountryPicker />
         </Section>
@@ -203,6 +242,24 @@ export function Component() {
               </li>
             ))}
           </ol>
+        </Section>
+
+        <Section id="articles" kicker="Read" title="Guides worth five minutes">
+          <ul className="grid gap-5 md:grid-cols-2 lg:grid-cols-3" data-stagger>
+            {ARTICLES.map((a, i) => (
+              <li key={a.slug} className={i === 0 ? "md:col-span-2 lg:col-span-1 lg:row-span-2" : ""}>
+                <Link to={href(`/guides/${a.slug}`)} className="lift group flex h-full flex-col overflow-hidden rounded-[22px] border border-line bg-white">
+                  <img src={guideImage(a.slug)} alt="" width={800} height={420} loading="lazy" decoding="async" className="aspect-[40/21] w-full bg-cream-2 object-cover" />
+                  <span className="flex flex-1 flex-col p-5">
+                    <span className="font-mono text-[11px] font-bold uppercase tracking-widest text-coral-700">{a.kicker}</span>
+                    <span className="mt-1 block text-lg font-extrabold leading-snug text-ink group-hover:text-coral-700">{a.title}</span>
+                    {i === 0 && <span className="mt-2 block text-ink-2">{a.description}</span>}
+                    <span className="mt-auto pt-3 font-mono text-[11px] uppercase tracking-widest text-ink-3">{Math.max(2, Math.round(a.words / 220))} min read</span>
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
         </Section>
 
         <Section id="guides" kicker="Lists & guides" title="Answers people search for most">
