@@ -4,7 +4,10 @@ import { brandOfPolicy, brandStores, countryOfPolicy, inCountry } from "../../da
 import Seo from "../Seo";
 import { breadcrumbSchema, faqSchema } from "../schema";
 import { Breadcrumbs, Container, CountryChip, FaqList, ReceiptLines, Section, Stamp, StoreTicket, TicketImage, Timeline, windowLabel } from "../ui";
-import DeadlineCalculator from "../DeadlineCalculator";
+import ReturnChecker from "../ReturnChecker";
+import TocNav from "../TocNav";
+import { articlesForStore } from "../articles";
+import { useEffect } from "react";
 import PolicyActions from "../PolicyActions";
 import { ReadingProgress } from "../ScrollEffects";
 import { categoryOf, clamp, formatDate, hostOf, monthYear, pairSlug, pairsFor, relatedStores, storeImage, storeOg } from "../data";
@@ -29,9 +32,23 @@ export function storeDescription(p: VerifiedPolicy) {
   return clamp(`How long you have to return to ${p.name} and how refunds work: ${p.headline.charAt(0).toLowerCase()}${p.headline.slice(1)}. Checked ${monthYear(p.checked)} on ${hostOf(p.source)}.`);
 }
 
+function useRememberStore(slug: string | undefined) {
+  useEffect(() => {
+    if (!slug) return;
+    try {
+      const key = "rpf-recent";
+      const list = JSON.parse(window.localStorage.getItem(key) ?? "[]") as string[];
+      window.localStorage.setItem(key, JSON.stringify([slug, ...list.filter((s) => s !== slug)].slice(0, 8)));
+    } catch {
+      /* storage blocked */
+    }
+  }, [slug]);
+}
+
 export function Component() {
   const { slug } = useParams<{ slug: string }>();
   const p = getPolicy(slug);
+  useRememberStore(p?.slug);
   if (!p) return <NotFoundContent />;
 
   const path = `/stores/${p.slug}`;
@@ -49,9 +66,19 @@ export function Component() {
   const guides = guidesForStore(p.slug).filter((g) => g.slug !== "return-policy-cheat-sheet-2026");
   const pairs = pairsFor(p.slug);
   const related = relatedStores(p);
+  const articles = articlesForStore(p.slug);
+  const toc = [
+    { id: "check", text: "Can I still return it?" },
+    { id: "short", text: "Quick answer" },
+    { id: "receipt", text: "Rules at a glance" },
+    ...(p.timeline.length > 1 ? [{ id: "deadline", text: "Key dates" }] : []),
+    { id: "exceptions", text: "Exceptions" },
+    { id: "steps", text: "How to return" },
+    { id: "faq", text: "Questions" },
+  ];
 
   return (
-    <article>
+    <article className="pb-20 lg:pb-0">
       <ReadingProgress />
       <Seo
         title={storeTitle(p)}
@@ -120,6 +147,10 @@ export function Component() {
               <PolicyActions title={`${p.name} return policy`} />
             </div>
 
+            <Section id="check" kicker="Personal check" title="Can I still return it?" intro={`Answer four quick questions and see your exact ${p.name} deadline, plus the rules that apply to your item.`}>
+              <ReturnChecker p={p} />
+            </Section>
+
             <Section id="short" kicker="Quick answer" title={`${p.name} returns in 20 seconds`}>
               <p className="text-lg text-ink-2">{p.summary}</p>
               {p.holiday && (
@@ -151,11 +182,8 @@ export function Component() {
             />
 
             {p.timeline.length > 1 && (
-              <Section id="deadline" kicker="Your dates" title="When is your last day?" intro="Each milestone counts from the day the window starts (purchase or delivery, as shown above).">
+              <Section id="deadline" kicker="Key dates" title={`${p.name} return timeline`} intro="Each milestone counts from the day the window starts (purchase or delivery, as shown above).">
                 <Timeline points={p.timeline} />
-                <div className="mt-6">
-                  <DeadlineCalculator p={p} />
-                </div>
               </Section>
             )}
 
@@ -224,25 +252,9 @@ export function Component() {
           </div>
 
           <aside className="mt-12 space-y-5 lg:sticky lg:top-24 lg:self-start" aria-label="Related">
-            <nav aria-label="On this page" className="hidden rounded-[22px] border border-line bg-white p-5 lg:block">
-              <p className="font-mono text-xs font-bold uppercase tracking-widest text-ink-3">On this page</p>
-              <ul className="mt-3 space-y-2 text-sm">
-                {[
-                  ["short", "Quick answer"],
-                  ["receipt", "Rules at a glance"],
-                  ...(p.timeline.length > 1 ? [["deadline", "Deadline calculator"]] : []),
-                  ["exceptions", "Exceptions"],
-                  ["steps", "How to return"],
-                  ["faq", "Questions"],
-                ].map(([id, label]) => (
-                  <li key={id}>
-                    <a href={`#${id}`} className="text-ink-2 hover:text-coral-700 hover:underline">
-                      {label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </nav>
+            <div className="hidden lg:block">
+              <TocNav items={toc} />
+            </div>
             {brand && siblings.length > 1 && (
               <div className="rounded-[22px] border border-line bg-white p-5">
                 <p className="font-mono text-xs font-bold uppercase tracking-widest text-ink-3">{brand.name} in other countries</p>
@@ -295,6 +307,20 @@ export function Component() {
                 </span>
               </Link>
             )}
+            {articles.length > 0 && (
+              <div className="rounded-[22px] border border-line bg-white p-5">
+                <p className="font-mono text-xs font-bold uppercase tracking-widest text-ink-3">Read next</p>
+                <ul className="mt-3 space-y-2 text-sm">
+                  {articles.map((a) => (
+                    <li key={a.slug}>
+                      <Link to={href(`/guides/${a.slug}`)} className="font-semibold text-ink-2 hover:text-coral-700 hover:underline">
+                        {a.title.split(":")[0]}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
             {guides.length > 0 && (
               <div className="rounded-[22px] border border-line bg-white p-5">
                 <p className="font-mono text-xs font-bold uppercase tracking-widest text-ink-3">{p.name} appears in</p>
@@ -322,6 +348,25 @@ export function Component() {
           </Section>
         )}
       </Container>
+
+      {/* Mobile action bar: the number and the two things people do next */}
+      <div className="no-print fixed inset-x-0 bottom-0 z-30 border-t border-line bg-white/95 px-4 py-2.5 backdrop-blur lg:hidden" style={{ paddingBottom: "max(0.625rem, env(safe-area-inset-bottom))" }}>
+        <div className="mx-auto flex max-w-xl items-center gap-3">
+          <span className="flex flex-col leading-none">
+            <span className="font-mono text-2xl font-extrabold text-coral-700">
+              {w.big}
+              <span className="ml-1 text-xs text-ink-3">{w.unit}</span>
+            </span>
+            <span className="mt-0.5 max-w-[7.5rem] truncate text-[11px] text-ink-3">{p.name}</span>
+          </span>
+          <a href="#check" className="ml-auto inline-flex min-h-[44px] items-center rounded-full bg-coral-700 px-4 text-sm font-bold text-white">
+            Check my item
+          </a>
+          <a href={p.source} target="_blank" rel="noopener nofollow" className="inline-flex min-h-[44px] items-center rounded-full border-2 border-navy px-4 text-sm font-bold text-ink">
+            Official ↗
+          </a>
+        </div>
+      </div>
     </article>
   );
 }

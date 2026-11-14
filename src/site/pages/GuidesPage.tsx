@@ -3,6 +3,7 @@ import Seo from "../Seo";
 import { breadcrumbSchema, itemListSchema } from "../schema";
 import { Breadcrumbs, Container } from "../ui";
 import { GUIDES } from "../guides";
+import { ARTICLES } from "../articles";
 import { guideImage } from "../data";
 import { href } from "../config";
 
@@ -15,9 +16,9 @@ export function Component() {
     <>
       <Seo
         title="Return Policy Guides & Lists 2026"
-        description="Cheat sheets and lists built from verified store data: 90-day stores, shortest windows, holiday deadlines, no-receipt rules, restocking fees and free returns."
+        description="Guides and lists built from verified store data: best return policies, online returns, electronics, gifts, holiday deadlines, no-receipt rules and fees."
         path="/guides"
-        jsonLd={[breadcrumbSchema(crumbs), itemListSchema("Return policy guides", GUIDES.map((g) => ({ name: g.h1, path: `/guides/${g.slug}` })))]}
+        jsonLd={[breadcrumbSchema(crumbs), itemListSchema("Return policy guides", [...ARTICLES.map((a) => ({ name: a.title, path: `/guides/${a.slug}` })), ...GUIDES.map((g) => ({ name: g.h1, path: `/guides/${g.slug}` }))])]}
       />
       <div className="border-b border-line bg-white">
         <Container className="py-10">
@@ -29,7 +30,25 @@ export function Component() {
         </Container>
       </div>
       <Container className="py-10">
-        <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-stagger>
+        <h2 className="text-2xl text-ink">In-depth guides</h2>
+        <ul className="mt-5 grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-stagger>
+          {ARTICLES.map((a) => (
+            <li key={a.slug}>
+              <Link to={href(`/guides/${a.slug}`)} className="lift group block h-full overflow-hidden rounded-[22px] border border-line bg-white">
+                <img src={guideImage(a.slug)} alt="" width={800} height={420} loading="lazy" decoding="async" className="aspect-[40/21] w-full bg-cream-2 object-cover" />
+                <span className="block p-5">
+                  <span className="font-mono text-[11px] font-bold uppercase tracking-widest text-coral-700">
+                    {a.kicker} · {Math.max(2, Math.round(a.words / 220))} min read
+                  </span>
+                  <span className="mt-1 block text-lg font-extrabold leading-snug text-ink group-hover:text-coral-700">{a.title}</span>
+                  <span className="mt-2 block text-sm text-ink-2">{a.description}</span>
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <h2 className="mt-14 text-2xl text-ink">Lists from the data</h2>
+        <ul className="mt-5 grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-stagger>
           {GUIDES.map((g) => (
             <li key={g.slug}>
               <Link to={href(`/guides/${g.slug}`)} className="lift group block h-full overflow-hidden rounded-[22px] border border-line bg-white">
